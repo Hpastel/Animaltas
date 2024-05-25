@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg" href="imagens/Prancheta 2.3.svg" />
+  <title>Animaltas</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/anime.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="css/tema-pagina.css" />
+</head>
+<header>
+  <img id="banner" src="imagens/Prancheta 2.4.svg" />
+  <ul class="opcoes">
+    <select class="selection" name="" id="opcoes">
+      <option value="Animes">Animes</option>
+      <option value="News">Notícias</option>
+      <option value="Game">Game</option>
+    </select>
+    <a href="jogo.html">
+      <li class="btn btn-primary">Game</li>
+    </a>
+    <li class="tema-pagina">
+      <div class="ball"></div>
+    </li>
+  </ul>
+</header>
+
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="search" class="form-control" id="search" placeholder="Procurar por animes"
+            aria-label="Procurar por animes" data-search />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="news-animes">
+    <div class="info vertical-bar" id="news">
+      <h2>Notícias</h2>
+      <ul id="news-list">
+        <!-- Aqui serão inseridas as notícias -->
+      </ul>
+    </div>
+
+    <div class="info" id="animes">
+      <div class="container mt-5">
+        <div class="row" id="anime-card-container">
+          <!-- Aqui serão inseridos os cards dos animes -->
+        </div>
+      </div>
+
+      <template id="anime-template">
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <img class="card-img-top" data-image />
+            <div class="card-body">
+              <h5 class="card-title" data-header></h5>
+              <p class="card-text" data-body></p>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 pagination-container">
+        <nav aria-label="Page navigation">
+          <ul class="pagination" id="pagination-container">
+            <!-- A paginação será adicionada aqui automaticamente -->
+          </ul>
+        </nav>
+        <button id="load-more" class="btn btn-primary" style="display: none">
+          Carregar Mais
+        </button>
+      </div>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase"></script>
+  <script src="js/anime.js"></script>
+  <script src="js/tema-pagina.js"></script>
+</body>
+
+</html>

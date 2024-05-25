@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="imagens/Prancheta 2.3.svg" />
+    <title>Perfil</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/perfil.css" />
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="../anime.html">Animaltas</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="perfil.html">Perfil</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Perfil do Usuário</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="userName">Nome:</label>
+                                <input type="text" class="form-control" id="userName" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="userEmail">Email:</label>
+                                <input type="email" class="form-control" id="userEmail" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label for="userBio">Bio:</label>
+                                <textarea class="form-control" id="userBio" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Animes Disponíveis</h3>
+                    </div>
+                    <div class="card-body" id="animeList">
+                        <!-- Lista de animes será carregada aqui -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Favoritos</h3>
+                    </div>
+                    <div class="card-body" id="favoriteList">
+                        <!-- Lista de favoritos será carregada aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase.js"></script>
+    <script src="../js/perfil.js"></script>
+</body>
+
+</html>

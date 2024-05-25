@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg" href="../imagens/Prancheta 2.3.svg">
+    <title>Detalhes do Anime</title>
+    <!-- Link para o Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Link para o CSS personalizado -->
+    <link rel="stylesheet" href="../css/detalhes_anime.css">
+    <link rel="stylesheet" href="../css/tema-pagina.css">
+    <!-- Script personalizado -->
+
+</head>
+
+<body>
+    <header>
+        <img id="banner" src="../imagens/Prancheta 1.4.svg">
+        <ul class="opcoes">
+            <a href="../anime.html">
+                <li class="btn btn-primary">Home</li>
+            </a>
+            <a href="../jogo.html">
+                <li class="btn btn-primary">Game</li>
+            </a>
+            <li class="tema-pagina">
+                <div class="ball">
+                </div>
+            </li>
+        </ul>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="anime-info">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="" alt="Imagem do Anime" class="img-fluid" id="anime-image">
+                        </div>
+                        <div class="col-md-8">
+                            <h2 id="anime-title"></h2>
+                            <div class="anime-options">
+                                <button class="option" onclick="toggleSection('sinopse')">Sinopse</button>
+                                <button class="option" onclick="toggleSection('episodes')">Episódios</button>
+                                <button class="option" onclick="toggleSection('personagens')">Personagens</button>
+                                <button class="option" onclick="toggleSection('reviews')">Reviews</button>
+                                <button class="option" onclick="toggleSection('recomendacoes')">Recomendações</button>
+                                <button class="option" id="anime-card"></button>
+
+
+
+                            </div>
+                            <hr class="divider">
+                            <div id="sinopse-container">
+                                <p id="anime-synopsis"></p>
+                            </div>
+                            <div class="information" id="episodes-container" style="display: none;">
+                                <!-- Conteúdo dos episódios aqui -->
+                            </div>
+                            <div class="information personagens" id="personagens-container" style="display: none;">
+                                <!-- Conteúdo dos personagens aqui -->
+                            </div>
+                            <div id="status-container" style="display: none;">
+                                <!-- Conteúdo do status aqui -->
+                            </div>
+                            <div class="information" id="reviews-container" style="display: none;">
+                                <!-- Conteúdo das reviews aqui -->
+                            </div>
+                            <div class="information" id="recomendacoes-container" style="display: none;">
+                                <!-- Conteúdo das recomendações aqui -->
+                            </div>
+                            <hr class="divider">
+                            <div class="info">
+                                <p><strong>Avaliação:</strong> <span id="anime-score"></span></p>
+                                <p><strong>Status:</strong> <span id="anime-status"></span></p>
+                            </div>
+                            <hr class="divider">
+                            <div class="info">
+                                <p><strong>Estreia:</strong> <span id="anime-airing"></span></p>
+                                <p><strong>Classificação:</strong> <span id="anime-rating"></span></p>
+                            </div>
+                            <hr class="divider">
+                            <p><strong>Link MAL:</strong> <a href="#" id="anime-url" target="_blank">Ver no
+                                    MyAnimeList</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase.js"></script>
+    <script src="../js/detalhes_anime.js"></script>
+    <script src="../js/tema-pagina-detalhes.js"></script>
+</body>
+
+</html>
