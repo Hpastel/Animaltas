@@ -235,10 +235,11 @@ async function waitForUserAuth() {
     });
   });
 }
+const ITEMS_LIMIT = 5;
 
 function exibirEpisodios(episodes) {
   const episodiosContainer = document.getElementById("episodes-container");
-  episodiosContainer.innerHTML = "";
+  episodiosContainer.innerHTML = ""; // Limpa o conteúdo anterior
   let displayedEpisodes = 0;
 
   episodes.slice(0, ITEMS_LIMIT).forEach((episode, index) => {
@@ -268,15 +269,14 @@ function exibirEpisodios(episodes) {
 function criarElementoEpisodio(episode, index) {
   const episodeElement = document.createElement("div");
   episodeElement.classList.add("episode");
-  episodeElement.innerHTML = `<div class="episode-title">Episódio ${
-    index + 1
-  }: ${episode.title}</div>`;
+  episodeElement.innerHTML = `
+    <div class="episode-title">Episódio ${index + 1}: ${episode.title}</div>`;
   return episodeElement;
 }
 
 function exibirPersonagens(personagens) {
   const personagensContainer = document.getElementById("personagens-container");
-  personagensContainer.innerHTML = "";
+  personagensContainer.innerHTML = ""; // Limpa o conteúdo anterior
   let displayedPersonagens = 0;
 
   personagens.slice(0, ITEMS_LIMIT).forEach((personagem, index) => {
@@ -305,14 +305,33 @@ function exibirPersonagens(personagens) {
   }
 }
 
-function criarElementoPersonagem(personagem, index) {
-  const personagemElement = document.createElement("div");
-  personagemElement.classList.add("personagem");
-  personagemElement.innerHTML = `
-    <img src="${personagem.character.images.jpg.image_url}" alt="${personagem.character.name}">
-    <div class="personagem-name">${personagem.character.name}</div>
-  `;
-  return personagemElement;
+function criarElementoPersonagem(personagem) {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const image = document.createElement("img");
+  image.className = "card-img-top";
+
+  let imageSrc =
+    personagem.character.images &&
+    personagem.character.images.jpg &&
+    personagem.character.images.jpg.image_url
+      ? personagem.character.images.jpg.image_url
+      : "https://via.placeholder.com/65x60";
+  image.src = imageSrc;
+
+  const cardBody = document.createElement("div");
+  cardBody.className = "card-body";
+
+  const cardTitle = document.createElement("h5");
+  cardTitle.className = "card-title";
+  cardTitle.textContent = personagem.character.name;
+
+  cardBody.appendChild(cardTitle);
+  card.appendChild(image);
+  card.appendChild(cardBody);
+
+  return card;
 }
 
 function exibirReviews(reviews) {
@@ -320,12 +339,12 @@ function exibirReviews(reviews) {
   reviewsContainer.innerHTML = "";
   let displayedReviews = 0;
 
-  reviews.slice(0, ITEMS_LIMIT).forEach((review, index) => {
+  reviews.slice(0, 1).forEach((review, index) => {
     reviewsContainer.appendChild(criarElementoReview(review, index));
     displayedReviews++;
   });
 
-  if (reviews.length > ITEMS_LIMIT) {
+  if (reviews.length > 1) {
     const loadMoreButton = criarBotaoCarregarMais(() => {
       reviews
         .slice(displayedReviews, displayedReviews + ITEMS_LIMIT)
@@ -344,12 +363,12 @@ function exibirReviews(reviews) {
   }
 }
 
-function criarElementoReview(review, index) {
+function criarElementoReview(review) {
   const reviewElement = document.createElement("div");
   reviewElement.classList.add("review");
   reviewElement.innerHTML = `
-    <div class="review-user">${review.user.username}</div>
-    <div class="review-content">${review.review}</div>
+    <div class="review-autor">Autor: ${review.user.username}</div>
+    <div class="review-detalhes">${review.review}</div>
   `;
   return reviewElement;
 }
@@ -358,7 +377,7 @@ function exibirRecomendacoes(recomendacoes) {
   const recomendacoesContainer = document.getElementById(
     "recomendacoes-container"
   );
-  recomendacoesContainer.innerHTML = "";
+  recomendacoesContainer.innerHTML = ""; // Limpa o conteúdo anterior
   let displayedRecomendacoes = 0;
 
   recomendacoes.slice(0, ITEMS_LIMIT).forEach((recomendacao, index) => {
@@ -390,21 +409,44 @@ function exibirRecomendacoes(recomendacoes) {
   }
 }
 
-function criarElementoRecomendacao(recomendacao, index) {
+function criarElementoRecomendacao(recomendacao) {
   const recomendacaoElement = document.createElement("div");
   recomendacaoElement.classList.add("recomendacao");
-  recomendacaoElement.innerHTML = `
-    <div class="recomendacao-title">${recomendacao.entry.title}</div>
-    <div class="recomendacao-content">${recomendacao.content}</div>
-  `;
+  recomendacaoElement.innerHTML = `<div class="recomendacao-titulo">${recomendacao.entry.title}</div>`;
   return recomendacaoElement;
 }
 
 function criarBotaoCarregarMais(onClick) {
   const loadMoreButton = document.createElement("button");
   loadMoreButton.textContent = "Carregar Mais";
-  loadMoreButton.onclick = onClick;
+  loadMoreButton.classList.add("btn", "btn-primary");
+  loadMoreButton.addEventListener("click", onClick);
   return loadMoreButton;
+}
+
+// Função para alternar a exibição entre as seções
+function toggleSection(section) {
+  const sections = [
+    "sinopse-container",
+    "episodes-container",
+    "personagens-container",
+    "status-container",
+    "reviews-container",
+    "recomendacoes-container",
+  ];
+
+  sections.forEach((id) => {
+    document.getElementById(id).style.display = "none";
+  });
+
+  const sectionId = `${section}-container`;
+  const personagemId = `personagens-container`;
+
+  if (sectionId != personagemId) {
+    document.getElementById(sectionId).style.display = "block";
+  } else {
+    document.getElementById(personagemId).style.display = "flex";
+  }
 }
 
 async function addToFavorites(animeId, title, imageUrl) {
