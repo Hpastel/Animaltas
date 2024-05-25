@@ -4,8 +4,8 @@ const rows = 16;
 const columns = 16;
 
 let board;
-let boardWidth = tileSize * columns; // 32 * 16
-let boardHeight = tileSize * rows; // 32 * 16
+let boardWidth = tileSize * columns; // 64 * 16
+let boardHeight = tileSize * rows; // 64 * 16
 let context;
 
 //ship
@@ -70,8 +70,44 @@ window.onload = function() {
     requestAnimationFrame(update);
     document.addEventListener("keydown", moveShip);
     document.addEventListener("keyup", shoot);
+
+    // Adicionar eventos de toque para dispositivos móveis
+    board.addEventListener("touchstart", handleTouchStart);
+    board.addEventListener("touchmove", handleTouchMove);
+    board.addEventListener("touchend", handleTouchEnd);
 }
 
+// Variáveis para controles de toque
+let touchStartX = 0;
+let touchStartY = 0;
+
+function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}
+
+function handleTouchMove(e) {
+    let touchX = e.touches[0].clientX;
+    let touchY = e.touches[0].clientY;
+
+    let deltaX = touchX - touchStartX;
+
+    if (deltaX < -tileSize) {
+        // mover nave para a esquerda
+        moveShip({ code: "ArrowLeft" });
+        touchStartX = touchX; // resetar ponto inicial do toque
+    } else if (deltaX > tileSize) {
+        // mover nave para a direita
+        moveShip({ code: "ArrowRight" });
+        touchStartX = touchX; // resetar ponto inicial do toque
+    }
+}
+
+function handleTouchEnd(e) { 
+    // disparar tiro ao terminar o toque
+    shoot({ code: "Space" });
+
+     }
 function update() {
     requestAnimationFrame(update);
 
