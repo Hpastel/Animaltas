@@ -14,21 +14,19 @@
 <header>
   <img id="banner" src="imagens/Prancheta 2.4.svg" />
   <ul class="opcoes">
+    <li class="tema-pagina">
+      <div class="ball"></div>
+    </li>
     <select class="selection" name="" id="opcoes">
       <option value="Animes">Animes</option>
       <option value="News">Notícias</option>
       <option value="Game">Game</option>
+      <option value="Login">Login</option>
+      <option value="Register">Registrar</option>
     </select>
-    <a href="html/jogo.html">
-      <li class="btn btn-primary">Game</li>
-    </a>
-    <li class="tema-pagina">
-      <div class="ball"></div>
-    </li>
-    <li>
-       <!-- Embutir a rádio usando um iframe -->
-       <iframe src="https://tunein.com/embed/player/s287770/" style="width:100%; height:100px;" scrolling="no" frameborder="no"></iframe>
-    </li>
+    <a href="html/jogo.html"><li class="btn btn-primary">Game</li></a>
+    <a href="html/login.html"><li class="btn btn-primary">Login</li></a>
+    <a href="html/register.html"><li class="btn btn-primary">Registrar</li></a>
   </ul>
 </header>
 
@@ -45,13 +43,18 @@
   </div>
 
   <div class="news-animes">
+    <div class="radio-news">
+    <li class="nothing">
+      <!-- Embutir a rádio usando um iframe -->
+      <iframe class="radio" src="https://tunein.com/embed/player/s287770/" scrolling="no"></iframe>
+    </li>
     <div class="info vertical-bar" id="news">
       <h2>Notícias</h2>
       <ul id="news-list">
         <!-- Aqui serão inseridas as notícias -->
       </ul>
     </div>
-
+  </div>
     <div class="info" id="animes">
       <div class="container mt-5">
         <div class="row" id="anime-card-container">

@@ -14,7 +14,7 @@ loginForm.addEventListener('submit', (e) => {
             // Signed in
             const user = userCredential.user;
             console.log('User logged in:', user);
-            window.location.href = '../anime.html';
+            window.location.href = '../index.html';
         })
         .catch((error) => {
             const errorCode = error.code;

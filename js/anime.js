@@ -240,8 +240,14 @@ if (mediaQuery.matches) {
     } else if (selectedOption === "News") {
       selectedOptionSection = document.getElementById("news");
     } else if (selectedOption === "Game") {
-      window.location.href = "jogo.html";
-      return; // Para evitar que o código continue executando
+      window.location.href = "html/jogo.html";
+      return;
+    } else if (selectedOption === "Login") {
+      window.location.href = "html/login.html";
+      return;
+    } else if (selectedOption === "Register") {
+      window.location.href = "html/register.html";
+      return;
     }
 
     if (selectedOptionSection) {

@@ -9,7 +9,6 @@ if (theme === 'dark') {
   banner.src = "imagens/Prancheta 1.4.svg"
   banner.classList.add('dark_banner')
   news.classList.add('dark_news')
-
 } else {
   banner.src = "imagens/Prancheta 2.4.svg"
   banner.classList.remove('dark_banner') 
@@ -26,11 +25,13 @@ document.querySelector('.ball').addEventListener('click', (e)=>{
         banner.src = "imagens/Prancheta 1.4.svg"
         banner.classList.add('dark_banner')
         news.classList.add('dark_news')
+    
       } else {
         // code to execute if body does not have class 'dark'
         localStorage.setItem('theme', 'light');
         banner.src = "imagens/Prancheta 2.4.svg"
         banner.classList.remove('dark_banner') 
         news.classList.remove('dark_news')
+    
       }
 });

@@ -19,7 +19,7 @@ document.getElementById('registerForm').addEventListener('submit', (e) => {
             });
         })
         .then(() => {
-            window.location.href = '../anime.html';
+            window.location.href = '../index.html';
         })
         .catch((error) => {
             console.error('Error registering user: ', error);
