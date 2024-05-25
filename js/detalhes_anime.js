@@ -1,5 +1,5 @@
 const auth = firebase.auth();
-// Função para buscar os detalhes do anime com base no animeId, incluindo a lista de episódios
+
 async function fetchAnimeInfo(animeId) {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
@@ -106,20 +106,17 @@ async function fetchRecomendacoes(animeId) {
   });
 }
 
-// Função para buscar a tradução da Sinopse do anime
 async function traduzirSinopse(synopsis) {
   const chaveAPI = "SUA_CHAVE_API_DO_GOOGLE_TRANSLATE";
   const texto = synopsis;
-  const idiomaDestino = "pt"; // Traduzir para Português
+  const idiomaDestino = "pt";
 
   const url = `https://translation.googleapis.com/language/translate/v2?key=${chaveAPI}&q=${encodeURIComponent(
     texto
   )}&target=${idiomaDestino}`;
 
   try {
-    const response = await fetch(url, {
-      method: "POST",
-    });
+    const response = await fetch(url, { method: "POST" });
 
     if (response.ok) {
       const data = await response.json();
@@ -131,17 +128,36 @@ async function traduzirSinopse(synopsis) {
     }
   } catch (error) {
     console.error("Erro ao traduzir sinopse:", error);
-    return synopsis; // Retorna a sinopse original em caso de erro
+    return synopsis;
   }
 }
 
-// Função para exibir os detalhes do anime na página
+function criarBotaoFavorito(animeDetails) {
+  const criarBotaoElement = document.createElement("div");
+  criarBotaoElement.classList.add("BotaoFavorito");
+  const button = document.createElement("button");
+  button.textContent = "Adicionar aos Favoritos";
+  button.onclick = () => {
+    if (animeDetails) {
+      addToFavorites(
+        animeDetails.mal_id,
+        animeDetails.title,
+        animeDetails.images.jpg.large_image_url
+      );
+    } else {
+      console.error("Detalhes do anime não estão definidos.");
+    }
+  };
+  criarBotaoElement.appendChild(button);
+  return criarBotaoElement;
+}
+
 async function mostrarDetalhesAnime(animeId) {
   try {
-    const user = auth.currentUser;
+    const user = await waitForUserAuth();
     let animeDetails = await fetchAnimeInfo(animeId);
+    console.log("Detalhes do anime:", animeDetails); // Log para depuração
 
-    // Exibe os detalhes básicos do anime
     document.getElementById("anime-image").src =
       animeDetails.images.jpg.large_image_url;
     document.getElementById("anime-title").textContent = animeDetails.title;
@@ -154,43 +170,75 @@ async function mostrarDetalhesAnime(animeId) {
     document.getElementById("anime-rating").textContent = animeDetails.rating;
     document.getElementById("anime-url").href = animeDetails.url;
 
-    // Cria e adiciona o botão de favoritos
-    // Cria e adiciona o botão de favoritos
-    const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
-    const animeCard = document.getElementById("anime-card");
-    animeCard.appendChild(addToFavoritesBtn);
+    // Verificar se o usuário está autenticado
+    if (user) {
+      const userId = user.uid;
+      const favoritesRef = firebase.database().ref(`users/${userId}/favorites`);
 
+      favoritesRef.once("value", (snapshot) => {
+        if (snapshot.exists()) {
+          let isFavorite = false;
 
+          snapshot.forEach((childSnapshot) => {
+            const favoriteAnime = childSnapshot.val();
+            if (favoriteAnime.id === animeId.toString()) {
+              isFavorite = true;
+              return;
+            }
+          });
 
-    // Busca os episódios do anime
+          if (isFavorite) {
+            const addToFavoritesBtn = document.createElement("button");
+            addToFavoritesBtn.textContent = "Já nos Favoritos";
+            addToFavoritesBtn.disabled = true;
+            const animeCard = document.getElementById("anime-card");
+            animeCard.appendChild(addToFavoritesBtn);
+          } else {
+            const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
+            const animeCard = document.getElementById("anime-card");
+            animeCard.appendChild(addToFavoritesBtn);
+          }
+        } else {
+          const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
+          const animeCard = document.getElementById("anime-card");
+          animeCard.appendChild(addToFavoritesBtn);
+        }
+      });
+    } else {
+      console.log("Usuário não autenticado.");
+      // Se o usuário não estiver autenticado, apenas cria o botão padrão
+      const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
+      const animeCard = document.getElementById("anime-card");
+      animeCard.appendChild(addToFavoritesBtn);
+    }
+
     let episodes = await fetchEpisodes(animeId);
     exibirEpisodios(episodes);
 
-    // Busca os personagens do anime
     let personagens = await fetchPersonagens(animeId);
     exibirPersonagens(personagens);
 
-    // Busca as reviews do anime
     let reviews = await fetchReviews(animeId);
     exibirReviews(reviews);
 
-    // Busca as recomendações do anime
     let recomendacoes = await fetchRecomendacoes(animeId);
     exibirRecomendacoes(recomendacoes);
-
   } catch (error) {
     console.error("Erro ao exibir detalhes do anime:", error);
   }
 }
-
-
-
-// Limite inicial de itens exibidos
-const ITEMS_LIMIT = 5;
+async function waitForUserAuth() {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      unsubscribe(); // Remover o listener após receber a resposta
+      resolve(user);
+    });
+  });
+}
 
 function exibirEpisodios(episodes) {
   const episodiosContainer = document.getElementById("episodes-container");
-  episodiosContainer.innerHTML = ""; // Limpa o conteúdo anterior
+  episodiosContainer.innerHTML = "";
   let displayedEpisodes = 0;
 
   episodes.slice(0, ITEMS_LIMIT).forEach((episode, index) => {
@@ -220,14 +268,15 @@ function exibirEpisodios(episodes) {
 function criarElementoEpisodio(episode, index) {
   const episodeElement = document.createElement("div");
   episodeElement.classList.add("episode");
-  episodeElement.innerHTML = `
-    <div class="episode-title">Episódio ${index + 1}: ${episode.title}</div>`;
+  episodeElement.innerHTML = `<div class="episode-title">Episódio ${
+    index + 1
+  }: ${episode.title}</div>`;
   return episodeElement;
 }
 
 function exibirPersonagens(personagens) {
   const personagensContainer = document.getElementById("personagens-container");
-  personagensContainer.innerHTML = ""; // Limpa o conteúdo anterior
+  personagensContainer.innerHTML = "";
   let displayedPersonagens = 0;
 
   personagens.slice(0, ITEMS_LIMIT).forEach((personagem, index) => {
@@ -256,33 +305,14 @@ function exibirPersonagens(personagens) {
   }
 }
 
-function criarElementoPersonagem(personagem) {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const image = document.createElement("img");
-  image.className = "card-img-top";
-
-  let imageSrc =
-    personagem.character.images &&
-      personagem.character.images.jpg &&
-      personagem.character.images.jpg.image_url
-      ? personagem.character.images.jpg.image_url
-      : "https://via.placeholder.com/65x60";
-  image.src = imageSrc;
-
-  const cardBody = document.createElement("div");
-  cardBody.className = "card-body";
-
-  const cardTitle = document.createElement("h5");
-  cardTitle.className = "card-title";
-  cardTitle.textContent = personagem.character.name;
-
-  cardBody.appendChild(cardTitle);
-  card.appendChild(image);
-  card.appendChild(cardBody);
-
-  return card;
+function criarElementoPersonagem(personagem, index) {
+  const personagemElement = document.createElement("div");
+  personagemElement.classList.add("personagem");
+  personagemElement.innerHTML = `
+    <img src="${personagem.character.images.jpg.image_url}" alt="${personagem.character.name}">
+    <div class="personagem-name">${personagem.character.name}</div>
+  `;
+  return personagemElement;
 }
 
 function exibirReviews(reviews) {
@@ -290,12 +320,12 @@ function exibirReviews(reviews) {
   reviewsContainer.innerHTML = "";
   let displayedReviews = 0;
 
-  reviews.slice(0, 1).forEach((review, index) => {
+  reviews.slice(0, ITEMS_LIMIT).forEach((review, index) => {
     reviewsContainer.appendChild(criarElementoReview(review, index));
     displayedReviews++;
   });
 
-  if (reviews.length > 1) {
+  if (reviews.length > ITEMS_LIMIT) {
     const loadMoreButton = criarBotaoCarregarMais(() => {
       reviews
         .slice(displayedReviews, displayedReviews + ITEMS_LIMIT)
@@ -314,12 +344,12 @@ function exibirReviews(reviews) {
   }
 }
 
-function criarElementoReview(review) {
+function criarElementoReview(review, index) {
   const reviewElement = document.createElement("div");
   reviewElement.classList.add("review");
   reviewElement.innerHTML = `
-    <div class="review-autor">Autor: ${review.user.username}</div>
-    <div class="review-detalhes">${review.review}</div>
+    <div class="review-user">${review.user.username}</div>
+    <div class="review-content">${review.review}</div>
   `;
   return reviewElement;
 }
@@ -328,7 +358,7 @@ function exibirRecomendacoes(recomendacoes) {
   const recomendacoesContainer = document.getElementById(
     "recomendacoes-container"
   );
-  recomendacoesContainer.innerHTML = ""; // Limpa o conteúdo anterior
+  recomendacoesContainer.innerHTML = "";
   let displayedRecomendacoes = 0;
 
   recomendacoes.slice(0, ITEMS_LIMIT).forEach((recomendacao, index) => {
@@ -360,99 +390,54 @@ function exibirRecomendacoes(recomendacoes) {
   }
 }
 
-function criarElementoRecomendacao(recomendacao) {
+function criarElementoRecomendacao(recomendacao, index) {
   const recomendacaoElement = document.createElement("div");
   recomendacaoElement.classList.add("recomendacao");
-  recomendacaoElement.innerHTML = `<div class="recomendacao-titulo">${recomendacao.entry.title}</div>`;
+  recomendacaoElement.innerHTML = `
+    <div class="recomendacao-title">${recomendacao.entry.title}</div>
+    <div class="recomendacao-content">${recomendacao.content}</div>
+  `;
   return recomendacaoElement;
 }
-function criarBotaoFavorito(animeId, animeDetails) {
-  const criarBotaoElement = document.createElement("div");
-  criarBotaoElement.classList.add("BotaoFavorito");
-  const button = document.createElement("button");
-  button.textContent = "Adicionar aos Favoritos";
-  button.onclick = () => {
-    if (animeDetails) {
-      addToFavorites(animeDetails.mal_id, animeDetails.title, animeDetails.images.jpg.image_url);
-    } else {
-      console.error("Detalhes do anime não estão definidos.");
+
+function criarBotaoCarregarMais(onClick) {
+  const loadMoreButton = document.createElement("button");
+  loadMoreButton.textContent = "Carregar Mais";
+  loadMoreButton.onclick = onClick;
+  return loadMoreButton;
+}
+
+async function addToFavorites(animeId, title, imageUrl) {
+  const user = auth.currentUser;
+
+  if (user) {
+    const userId = user.uid;
+    const favoritesRef = firebase
+      .database()
+      .ref("users/" + userId + "/favorites");
+
+    const newFavorite = {
+      id: animeId.toString(),
+      title: title,
+      imageUrl: imageUrl,
+    };
+
+    try {
+      await favoritesRef.push(newFavorite);
+      console.log(`Anime ${title} adicionado aos favoritos com sucesso!`);
+    } catch (error) {
+      console.error("Erro ao adicionar anime aos favoritos:", error);
     }
-  }};
-
-  function addToFavorites(animeId, animeName, animeImageUrl) {
-    const user = auth.currentUser;
-    if (user) {
-      const userId = user.uid;
-      const favoriteAnime = {
-        id: animeId,
-        name: animeName,
-        imageUrl: animeImageUrl
-      };
-
-      db.collection('users').doc(userId).collection('favorites').doc(animeId).set(favoriteAnime)
-        .then(() => {
-          alert('Anime adicionado aos favoritos!');
-          // Aqui você pode adicionar lógica para atualizar a interface do usuário, se necessário
-        })
-        .catch(error => {
-          console.error('Erro ao adicionar anime aos favoritos: ', error);
-        });
-    } else {
-      console.log('Usuário não está autenticado.');
-      // Aqui você pode adicionar lógica para lidar com o usuário não autenticado, se necessário
-    }
+  } else {
+    console.log("Usuário não autenticado.");
   }
-
-
-  function criarBotaoCarregarMais(onClick) {
-    const loadMoreButton = document.createElement("button");
-    loadMoreButton.textContent = "Carregar Mais";
-    loadMoreButton.classList.add("btn", "btn-primary");
-    loadMoreButton.addEventListener("click", onClick);
-    return loadMoreButton;
+}
+window.onload = function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const animeId = urlParams.get("id");
+  if (animeId) {
+    mostrarDetalhesAnime(animeId);
+  } else {
+    console.error("ID do anime não especificado na URL.");
   }
-
-
-
-
-  // Função para alternar a exibição entre as seções
-  function toggleSection(section) {
-    const sections = [
-      "sinopse-container",
-      "episodes-container",
-      "personagens-container",
-      "status-container",
-      "reviews-container",
-      "recomendacoes-container",
-    ];
-
-    sections.forEach((id) => {
-      document.getElementById(id).style.display = "none";
-    });
-
-    const sectionId = `${section}-container`;
-    const personagemId = `personagens-container`;
-
-    if (sectionId != personagemId) {
-      document.getElementById(sectionId).style.display = "block";
-    } else {
-      document.getElementById(personagemId).style.display = "flex";
-    }
-  }
-
-  // Função para extrair o animeId da URL
-  function getAnimeIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id");
-  }
-
-  // Inicializa a página com a sinopse visível
-  document.addEventListener("DOMContentLoaded", () => {
-    const animeId = getAnimeIdFromURL(); // Obtém o ID do anime da URL
-    if (animeId) {
-      mostrarDetalhesAnime(animeId);
-      toggleSection("sinopse"); // Mostrar a sinopse por padrão
-    } else {
-      console.error("Anime ID não encontrado na URL");
-    }
-  });
+};
