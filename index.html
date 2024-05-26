@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="css/anime.css" />
   <link rel="stylesheet" href="css/responsive.css" />
   <link rel="stylesheet" href="css/tema-pagina.css" />
+  <script src="js/radio.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+
 </head>
 <header>
   <img id="banner" src="imagens/Prancheta 2.4.svg" />
@@ -27,27 +31,30 @@
     <a href="html/jogo.html"><li class="btn btn-primary">Game</li></a>
     <a href="html/login.html"><li class="btn btn-primary">Login</li></a>
     <a href="html/register.html"><li class="btn btn-primary">Registrar</li></a>
+    <a href="html/radio.html" class="pjax-link"><li class="btn btn-primary">Radio</li></a>
   </ul>
 </header>
 
 <body>
+  <!-- Radio player -->
+  <div class="radio-news">
+        <iframe id="radio-player" class="radio" src="https://tunein.com/embed/player/s287770/" scrolling="no"></iframe>
+  </div>
+<!-- Container for PJAX content -->
+<div id="pjax-container">
   <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input type="search" class="form-control" id="search" placeholder="Procurar por animes"
-            aria-label="Procurar por animes" data-search />
-        </div>
+      <div class="row justify-content-center">
+          <div class="col-md-6">
+              <div class="input-group">
+                  <input type="search" class="form-control" id="search" placeholder="Procurar por animes"
+                      aria-label="Procurar por animes" data-search />
+              </div>
+          </div>
       </div>
-    </div>
   </div>
 
   <div class="news-animes">
     <div class="radio-news">
-    <li class="nothing">
-      <!-- Embutir a rádio usando um iframe -->
-      <iframe class="radio" src="https://tunein.com/embed/player/s287770/" scrolling="no"></iframe>
-    </li>
     <div class="info vertical-bar" id="news">
       <h2>Notícias</h2>
       <ul id="news-list">
@@ -90,6 +97,10 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $(document).pjax('.pjax-link', '#pjax-container');
+  </script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
