@@ -58,13 +58,13 @@ window.onload = function() {
 
     //load images
     shipImg = new Image();
-    shipImg.src = "imagens/HandsofMouse.png";
+    shipImg.src = "../imagens/HandsofMouse.png";
     shipImg.onload = function() {
         context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
     }
 
     alienImg = new Image();
-    alienImg.src = "imagens/Seinen/Thorfinn.png";
+    alienImg.src = "../imagens/Seinen/Thorfinn.png";
     createAliens();
 
     requestAnimationFrame(update);
