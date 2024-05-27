@@ -43,7 +43,7 @@ searchInput.addEventListener("input", (e) => {
 async function fetchAnimeData(page) {
   try {
     const response = await fetch(
-      `https://api.jikan.moe/v4/top/anime?page=${page}`
+      `https://cors-anywhere.herokuapp.com/https://api.jikan.moe/v4/top/anime?page=${page}`
     );
     const data = await response.json();
 
