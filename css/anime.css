@@ -241,6 +241,11 @@ header img {
   .opcoes a{
       display: none;
   }
+  .radio-news {
+    width: 100;
+    display: flex;
+    justify-content: center;
+  }
   .vertical-bar{
       display: none;
   }
