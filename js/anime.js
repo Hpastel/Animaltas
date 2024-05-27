@@ -248,6 +248,8 @@ if (mediaQuery.matches) {
     } else if (selectedOption === "Register") {
       window.location.href = "html/register.html";
       return;
+    } else if (selectedOption === "Perfil"){
+      window.location.href = "html/perfil.html";
     }
 
     if (selectedOptionSection) {
@@ -262,3 +264,5 @@ if (mediaQuery.matches) {
 fetchAndDisplayAnimeNews(20);
 
 fetchAnimeData(currentPage);
+
+

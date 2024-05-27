@@ -142,3 +142,13 @@ firebase.auth().onAuthStateChanged((user) => {
     console.log("No user is signed in.");
   }
 });
+
+function logOff() {
+  firebase.auth().signOut().then(() => {
+    // User signed out successfully.
+    console.log("User signed out successfully.");
+  }).catch((error) => {
+    // An error occurred while signing out.
+    console.error("Error signing out:", error);
+  });
+}

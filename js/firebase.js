@@ -11,3 +11,19 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    document.getElementById('perfil').style.display = 'block';
+    document.getElementById('login').style.display = 'none'
+    document.getElementById('register').style.display = 'none'
+  } else {
+    // User is signed out.
+    document.getElementById('perfil').style.display = 'none';
+    document.getElementById('login').style.display = 'block';
+    document.getElementById('register').style.display = 'block';
+  }
+});
+
+firebase.auth()
