@@ -15,7 +15,9 @@ body{
     width: 0;
     height: 0;
 }
-
+.option{
+    margin: 0 0 5px 0;
+}
 .opcoes{
     display: flex;
     justify-content: center;

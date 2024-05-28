@@ -132,26 +132,6 @@ async function traduzirSinopse(synopsis) {
   }
 }
 
-function criarBotaoFavorito(animeDetails) {
-  const criarBotaoElement = document.createElement("div");
-  criarBotaoElement.classList.add("BotaoFavorito");
-  const button = document.createElement("button");
-  button.textContent = "Adicionar aos Favoritos";
-  button.onclick = () => {
-    if (animeDetails) {
-      addToFavorites(
-        animeDetails.mal_id,
-        animeDetails.title,
-        animeDetails.images.jpg.large_image_url
-      );
-    } else {
-      console.error("Detalhes do anime não estão definidos.");
-    }
-  };
-  criarBotaoElement.appendChild(button);
-  return criarBotaoElement;
-}
-
 async function mostrarDetalhesAnime(animeId) {
   try {
     const user = await waitForUserAuth();
@@ -186,9 +166,8 @@ async function mostrarDetalhesAnime(animeId) {
               return;
             }
           });
-
           if (isFavorite) {
-            const addToFavoritesBtn = document.createElement("button");
+            const addToFavoritesBtn = document.getElementById('favoritos')
             addToFavoritesBtn.textContent = "Já nos Favoritos";
             addToFavoritesBtn.disabled = true;
             const animeCard = document.getElementById("anime-card");
@@ -466,7 +445,7 @@ async function addToFavorites(animeId, title, imageUrl) {
 
     try {
       await favoritesRef.push(newFavorite);
-      console.log(`Anime ${title} adicionado aos favoritos com sucesso!`);
+      location.reload();
     } catch (error) {
       console.error("Erro ao adicionar anime aos favoritos:", error);
     }

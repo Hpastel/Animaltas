@@ -25,23 +25,18 @@
       <option value="Animes">Animes</option>
       <option value="News">Notícias</option>
       <option value="Game">Game</option>
-      <option value="Login" id="login">Login</option>
-      <option value="Register" id="register">Registrar</option>
-      <option value="Perfil" id="perfil">Perfil</option>
+      <option value="Login" id="login2">Login</option>
+      <option value="Register" id="register2">Registrar</option>
+      <option value="Perfil" id="perfil2">Perfil</option>
     </select>
     <a href="html/jogo.html"><li class="btn btn-primary">Game</li></a>
     <a href="html/login.html"><li class="btn btn-primary" id="login">Login</li></a>
     <a href="html/register.html"><li class="btn btn-primary" id="register">Registrar</li></a>
     <a href="html/perfil.html"><li class="btn btn-primary" id="perfil">Perfil</li></a>
-    <a href="html/radio.html" class="pjax-link"><li class="btn btn-primary">Radio</li></a>
   </ul>
 </header>
 
 <body>
-  <!-- Radio player -->
-  <div class="radio-news">
-        <iframe id="radio-player" class="radio" src="https://tunein.com/embed/player/s287770/" scrolling="no"></iframe>
-  </div>
 <!-- Container for PJAX content -->
 <div id="pjax-container">
   <div class="container mt-5">
@@ -57,9 +52,11 @@
 
   <div class="news-animes">
     <div class="radio-news">
-    <div class="info vertical-bar" id="news">
-      <h2>Notícias</h2>
-      <ul id="news-list">
+      <!-- Radio player -->
+      <iframe id="radio-player" class="radio" src="https://tunein.com/embed/player/s287770/" scrolling="no"></iframe>
+      <div class="info vertical-bar" id="news">
+        <h2>Notícias</h2>
+        <ul id="news-list">
         <!-- Aqui serão inseridas as notícias -->
       </ul>
     </div>

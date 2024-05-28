@@ -1,3 +1,10 @@
+const auth = firebase.auth();
+const perfil = document.getElementById('perfil') 
+const login = document.getElementById('login')
+const register = document.getElementById('register')
+const perfil2 = document.getElementById('perfil2') 
+const login2 = document.getElementById('login2')
+const register2 = document.getElementById('register2')
 const animeCardTemplate = document.getElementById("anime-template");
 const animeCardContainer = document.getElementById("anime-card-container");
 const searchInput = document.getElementById("search");
@@ -195,7 +202,7 @@ async function fetchAndDisplayAnimeNews(limit) {
 
   try {
     const response = await fetch(
-      "${corsAnywhereUrl}https://www.animenewsnetwork.com/news/rss.xml"
+      `${corsAnywhereUrl}https://www.animenewsnetwork.com/news/rss.xml`
     );
     const xmlText = await response.text();
     const parser = new DOMParser();
@@ -262,6 +269,23 @@ if (mediaQuery.matches) {
   // Exibir a seção "Animes" por padrão
   document.getElementById("animes").style.display = "block";
 };
+auth.onAuthStateChanged(user => {
+if (user) {
+  login.style.display = 'none';
+  register.style.display = 'none';
+  perfil.style.display = 'block';
+  login2.style.display = 'none';
+  register2.style.display = 'none';
+  perfil2.style.display = 'block';
+} else {
+  perfil.style.display = 'none';
+  login.style.display = 'block';
+  register.style.display = 'block';
+  perfil2.style.display = 'none';
+  login2.style.display = 'block';
+  register2.style.display = 'block';
+}
+})
 
 // Chamando a função fetchAndDisplayAnimeNews com limite de 20 notícias
 fetchAndDisplayAnimeNews(20);
