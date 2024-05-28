@@ -8,9 +8,6 @@ let currentPage = 1;
 const itemsPerPage = 25;
 const maxPagesToShow = 11;
 
-// Adicione o prefixo CORS Anywhere
-const corsAnywhereUrl = "https://cors-anywhere.herokuapp.com/";
-
 document.getElementById("opcoes").addEventListener("change", function () {
   const selectedOption = this.value;
   console.log(selectedOption);
@@ -195,7 +192,7 @@ async function fetchAndDisplayAnimeNews(limit) {
 
   try {
     const response = await fetch(
-      "${corsAnywhereUrl}https://www.animenewsnetwork.com/news/rss.xml"
+      "https://cors-anywhere.herokuapp.com/https://www.animenewsnetwork.com/news/rss.xml"
     );
     const xmlText = await response.text();
     const parser = new DOMParser();
