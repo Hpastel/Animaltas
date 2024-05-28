@@ -54,7 +54,13 @@ header img {
   margin: 0px 10px;
 } 
 .radio-news{
-  margin-right: 3.5%;
+  .radio-news{
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    margin: 20px 0; /* Espaçamento vertical */
+  }
+  
 }
 .radio{
   max-width: 100%;
@@ -234,6 +240,11 @@ header img {
   }
   .opcoes a{
       display: none;
+  }
+  .radio-news {
+    width: 100;
+    display: flex;
+    justify-content: center;
   }
   .vertical-bar{
       display: none;

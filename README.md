@@ -8,7 +8,6 @@
 <li>Pesquisa de Animes: Encontrar os animes pelo título.</li>
 <li>Detalhes do Anime: Ver informações detalhadas do mesmo</li>
 <li>Lista de Favoritos: Os utilizadores vão poder adicionar aos favoritos.</li>
-<li>Reprodução de Episódios: Assista aos episódios diretamente no site.</li>
 </ul>
 
 ## Tecnologias Utilizadas

@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg" href="imagens/Prancheta 2.3.svg" />
     <title>Registrar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/register.css">
 </head>
 
 <body>
@@ -31,7 +32,10 @@
                                 <label for="password">Senha:</label>
                                 <input type="password" class="form-control" id="password" required />
                             </div>
-                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <div class="error_submit">
+                                <p id="error"></p>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
