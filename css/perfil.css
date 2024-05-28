@@ -15,237 +15,28 @@
     --font-size-base: 1rem;
     --font-size-large: 1.25rem;
 }
-
-body {
-    transition: 1s;
-    background-color: #f8f9fa;
-    /* Changed */
-    color: var(--font-color);
-}
-
-header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-header img {
-    transition: 1s;
-    align-self: center;
-    width: 100%;
-}
-
-.news-animes {
+.card-body{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    
 }
 
-.opcoes {
-    display: flex;
-    justify-content: center;
-}
-
-.opcoes li {
-    background-color: var(--secondary-color);
-    list-style: none;
-    color: var(--primary-color);
-    padding: 0px 5px;
-    box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    margin: 0px 10px;
-}
-
-.invader {
-    border-radius: 5px;
-}
-
-/* Estilos para a barra vertical */
-.vertical-bar {
-    transition: 1s;
-    background-color: var(--secondary-color);
-    width: 300px;
-    padding: 20px;
-    margin-right: 7%;
-    float: left;
-    max-height: 1550px;
-}
-
-.vertical-bar::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-}
-
-/* Estilos para as notícias */
-.noticias {
-    margin-top: 0;
-    font-size: var(--font-size-large);
-    color: var(--font-color);
-}
-
-#news-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-#news-list li {
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-#news-list li:last-child {
-    border-bottom: none;
-}
-
-/* Estilos para os cards */
-.card {
-    border: none;
-    border-radius: 10px;
-    background-color: var(--secondary-color);
-    box-shadow: 0 4px 6px var(--shadow-color);
-    transition: box-shadow 0.3s ease;
-    width: 17.9%;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    padding-bottom: 13px;
-    margin-top: 20px;
-    /* Added */
-}
-
-.card:last-child {
-    margin-right: 0;
-}
-
-.card:hover {
-    box-shadow: 0 8px 12px var(--hover-shadow-color);
-}
-
-.card-img-top {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    object-fit: cover;
-    height: 80%;
-    width: 100%;
-}
-
-.card-body {
-    width: max-content;
-    height: max-content;
-    display: flex;
+.favorite-item{
     padding: 5px;
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-}
-
-.card-title {
+    box-shadow: 0 0 10px blue;
+    width: 200px;
     display: flex;
-    align-items: center;
-    margin: 0px;
-    font-size: var(--font-size-base);
-    font-weight: bold;
-    color: var(--font-color);
+    flex-direction: column;
+    text-align: center;
+    margin: 0 0 15px 0;
+}
+.favorite-item span{
+    height: 50px;
 }
 
-.card-text {
-    font-size: var(--font-size-base);
-    color: var(--font-color-secondary);
-}
-
-/* Estilos para o grupo de entrada */
-.input-group {
-    margin-bottom: 30px;
-}
-
-.form-control {
-    border-radius: 20px;
-    border: 1px solid #ced4da;
-}
-
-/* Estilos para os botões */
-.btn-outline-secondary {
-    border-radius: 20px;
-    border: 1px solid var(--btn-border-color);
-    color: var(--btn-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-outline-secondary:hover {
-    background-color: var(--btn-hover-bg-color);
-    color: var(--btn-hover-color);
-}
-
-/* Estilos para a paginação */
-.pagination {
-    margin-top: 30px;
-    justify-content: center;
-}
-
-.pagination a {
-    margin-right: 15px;
-    padding: 0px 5px;
-    border: none;
-    border-radius: 6px;
-    color: var(--pagination-font-color);
-    background-color: var(--pagination-bg-color);
-    width: fit-content;
-}
-
-.hide {
-    display: none;
-}
-
-.selection {
-    display: none;
-}
-
-@media (max-width: 420px) {
-    .card {
-        margin: 10px 10px;
-        width: 44.3%;
-    }
-
-    .card-title {
-        font-size: 15px;
-    }
-
-    .card-body {
-        padding: 5px;
-    }
-
-    .input-group {
-        margin-bottom: 0px;
-    }
-
-    .pagination {
-        margin-top: 10px;
-    }
-
-    .pagination a {
-        margin-right: 5px;
-        font-size: 10px;
-        margin-bottom: 10px;
-    }
-
-    .selection {
-        display: block;
-    }
-
-    .opcoes a {
-        display: none;
-    }
-
-    .vertical-bar {
-        display: none;
-    }
-}
-
-.card-header {
-    background-color: #007bff;
-    color: white;
-}
-
-.form-control[readonly] {
-    background-color: #e9ecef;
-    opacity: 1;
+.favorite-item img{
+    width: 100%;
+    height: 285px;
 }
