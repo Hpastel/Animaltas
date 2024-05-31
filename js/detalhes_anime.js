@@ -158,24 +158,45 @@ async function mostrarDetalhesAnime(animeId) {
     let animeDetails = await fetchAnimeInfo(animeId);
     console.log("Detalhes do anime:", animeDetails); // Log para depuração
 
-    document.getElementById("anime-image").src =
-      animeDetails.images.jpg.large_image_url;
-    document.getElementById("anime-title").textContent = animeDetails.title;
-    document.getElementById("anime-synopsis").textContent =
-      await traduzirSinopse(animeDetails.synopsis);
+    // Obter o título alterado do Firebase, se disponível
+    let alteredTitle = null; // Padrão para null
+    if (user) {
+      const userId = user.uid;
+      const titleRef = firebase.database().ref(`users/${userId}/favorites`);
+      const snapshot = await titleRef.once("value");
+      if (snapshot.exists()) {
+        const favorites = snapshot.val();
+        const animeFavorite = Object.values(favorites).find(favorite => favorite.id === animeId.toString());
+        if (animeFavorite && animeFavorite.title) {
+          alteredTitle = animeFavorite.title; // Título alterado pelo usuário
+        }
+      }
+    }
+
+    const displayTitle = alteredTitle && alteredTitle !== animeDetails.title ? `${alteredTitle} (${animeDetails.title})` : animeDetails.title;
+
+
+    document.getElementById("anime-image").src = animeDetails.images.jpg.large_image_url;
+    document.getElementById("anime-title").textContent = displayTitle;
+    document.getElementById("anime-synopsis").textContent = await traduzirSinopse(animeDetails.synopsis);
     document.getElementById("anime-score").textContent = animeDetails.score;
     document.getElementById("anime-status").textContent = animeDetails.status;
-    document.getElementById("anime-airing").textContent =
-      animeDetails.aired.string;
+    document.getElementById("anime-airing").textContent = animeDetails.aired.string;
     document.getElementById("anime-rating").textContent = animeDetails.rating;
     document.getElementById("anime-url").href = animeDetails.url;
 
     // Verificar se o usuário está autenticado
+    const animeCard = document.getElementById("anime-card");
+    const existingButton = document.querySelector(".BotaoFavorito");
+    if (existingButton) {
+      existingButton.remove(); // Remove o botão existente, se houver
+    }
+
     if (user) {
       const userId = user.uid;
       const favoritesRef = firebase.database().ref(`users/${userId}/favorites`);
 
-      favoritesRef.once("value", (snapshot) => {
+      favoritesRef.once("value").then((snapshot) => {
         if (snapshot.exists()) {
           let isFavorite = false;
 
@@ -188,27 +209,23 @@ async function mostrarDetalhesAnime(animeId) {
           });
 
           if (isFavorite) {
-            const addToFavoritesBtn = document.getElementById('anime-card')
+            const addToFavoritesBtn = document.createElement("div");
             addToFavoritesBtn.textContent = "Já nos Favoritos";
             addToFavoritesBtn.disabled = true;
-            const animeCard = document.getElementById("anime-card");
             animeCard.appendChild(addToFavoritesBtn);
           } else {
-            const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
-            const animeCard = document.getElementById("anime-card");
+            const addToFavoritesBtn = criarBotaoFavorito(animeDetails, userId);
             animeCard.appendChild(addToFavoritesBtn);
           }
         } else {
-          const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
-          const animeCard = document.getElementById("anime-card");
+          const addToFavoritesBtn = criarBotaoFavorito(animeDetails, userId);
           animeCard.appendChild(addToFavoritesBtn);
         }
       });
     } else {
       console.log("Usuário não autenticado.");
       // Se o usuário não estiver autenticado, apenas cria o botão padrão
-      const addToFavoritesBtn = criarBotaoFavorito(animeDetails);
-      const animeCard = document.getElementById("anime-card");
+      const addToFavoritesBtn = criarBotaoFavorito(animeDetails, null);
       animeCard.appendChild(addToFavoritesBtn);
     }
 
@@ -314,8 +331,8 @@ function criarElementoPersonagem(personagem) {
 
   let imageSrc =
     personagem.character.images &&
-    personagem.character.images.jpg &&
-    personagem.character.images.jpg.image_url
+      personagem.character.images.jpg &&
+      personagem.character.images.jpg.image_url
       ? personagem.character.images.jpg.image_url
       : "https://via.placeholder.com/65x60";
   image.src = imageSrc;

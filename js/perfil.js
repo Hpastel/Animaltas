@@ -70,6 +70,13 @@ function loadProfileAndFavorites() {
             changeNameBtn.onclick = () => changeAnimeName(childSnapshot.key);
             favoriteItem.appendChild(changeNameBtn);
 
+            // Criar botão para remover o anime dos favoritos
+            const removeFavoriteBtn = document.createElement("button");
+            removeFavoriteBtn.innerText = "X";
+            removeFavoriteBtn.className = "btn-remove-favorite";
+            removeFavoriteBtn.onclick = () => removeFavoriteAnime(childSnapshot.key);
+            favoriteItem.appendChild(removeFavoriteBtn);
+
             favoriteList.appendChild(favoriteItem);
           });
         }
@@ -114,21 +121,58 @@ function changeAnimeName(animeId) {
         .database()
         .ref("users/" + userId + "/favorites/" + animeId);
 
-      favoriteRef
-        .update({
-          title: newName,
-        })
-        .then(() => {
-          console.log("Nome do anime atualizado com sucesso!");
-          // Recarregar a lista de favoritos após a atualização
-          loadProfileAndFavorites();
-        })
-        .catch((error) => {
-          console.error("Erro ao atualizar nome do anime:", error);
-        });
+      if (newName.trim() === "") { // Se o novo nome estiver vazio, exclua o anime dos favoritos
+        favoriteRef
+          .remove()
+          .then(() => {
+            console.log("Anime removido dos favoritos com sucesso!");
+            // Recarregar a lista de favoritos após a exclusão
+            loadProfileAndFavorites();
+          })
+          .catch((error) => {
+            console.error("Erro ao remover anime dos favoritos:", error);
+          });
+      } else { // Caso contrário, apenas atualize o nome do anime
+        favoriteRef
+          .update({
+            title: newName,
+          })
+          .then(() => {
+            console.log("Nome do anime atualizado com sucesso!");
+            // Recarregar a lista de favoritos após a atualização
+            loadProfileAndFavorites();
+          })
+          .catch((error) => {
+            console.error("Erro ao atualizar nome do anime:", error);
+          });
+      }
     } else {
       console.log("No user is signed in.");
     }
+  }
+}
+
+// Função para remover o anime dos favoritos
+function removeFavoriteAnime(animeId) {
+  const user = auth.currentUser;
+  if (user) {
+    const userId = user.uid;
+    const favoriteRef = firebase
+      .database()
+      .ref("users/" + userId + "/favorites/" + animeId);
+
+    favoriteRef
+      .remove()
+      .then(() => {
+        console.log("Anime removido dos favoritos com sucesso!");
+        // Recarregar a lista de favoritos após a exclusão
+        loadProfileAndFavorites();
+      })
+      .catch((error) => {
+        console.error("Erro ao remover anime dos favoritos:", error);
+      });
+  } else {
+    console.log("No user is signed in.");
   }
 }
 
