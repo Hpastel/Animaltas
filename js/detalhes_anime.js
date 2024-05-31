@@ -107,7 +107,7 @@ async function fetchRecomendacoes(animeId) {
 }
 
 async function traduzirSinopse(synopsis) {
-  const chaveAPI = "SUA_CHAVE_API_DO_GOOGLE_TRANSLATE";
+  const chaveAPI = "AIzaSyDd2L9k4XNHuqF9Cug2A3ikS2x3iIvxj5w";
   const texto = synopsis;
   const idiomaDestino = "pt";
 
